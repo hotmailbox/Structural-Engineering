@@ -25,20 +25,37 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 '''
 
 from __future__ import division
-
+from __future__ import print_function
+from sys import version_info
 #Import Python Modules
-import matplotlib
-matplotlib.use('TKAgg')
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2TkAgg
-from matplotlib.figure import Figure
-import matplotlib.pyplot as plt
-import Tkinter as tk
-import tkFileDialog
-import tkMessageBox
-import math
-import tkFont
-import os
 
+if version_info.major == 2:
+    # We are using Python 2.x
+    import matplotlib
+    matplotlib.use('TKAgg')
+    from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2TkAgg
+    from matplotlib.figure import Figure
+    import matplotlib.pyplot as plt
+    import Tkinter as tk
+    import tkFileDialog
+    import tkMessageBox
+    import math
+    import tkFont
+    import os
+elif version_info.major ==3:
+    # We are using Python 3.x
+    import matplotlib
+    matplotlib.use('TKAgg')
+    from matplotlib.backends.backend_tkagg import FigureCanvasTk as FigureCanvasTkAgg , NavigationToolbar2Tk as NavigationToolbar2TkAgg
+    from matplotlib.figure import Figure
+    import matplotlib.pyplot as plt
+    import tkinter as tk
+    import tkinter.filedialog as tkFileDialog
+    import tkinter.messagebox as tkMessageBox
+    import math
+    import tkinter.font as tkFont
+    import os
+    
 #Import my modules
 import concrete_beam_classes as concbeam
 
@@ -325,7 +342,12 @@ class Main_window:
         self.pna_graph_label = self.FigSubPlot.annotate('(PNA: {0:.2f} in.)'.format(0,3),xy=(0,3), xytext=(5,-5), ha='left',textcoords='offset points', fontsize=8)
         self.cc_graph_label = self.FigSubPlot.annotate('(a,cg: {0:.2f} in.)'.format(0,4),xy=(0,4), xytext=(5,-5), ha='left',textcoords='offset points', fontsize=8)
         self.canvas = matplotlib.backends.backend_tkagg.FigureCanvasTkAgg(self.Fig, master=self.chart_frame)
-        self.canvas.show()
+        if version_info.major == 2:
+            # We are using Python 2.x
+                self.canvas.show()
+        elif version_info.major == 3:
+            # We are using Python 3.x
+                self.canvas.draw()
         self.canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=True)
         self.chart_toolbar = NavigationToolbar2TkAgg(self.canvas, self.chart_frame)
         self.chart_toolbar.update()
