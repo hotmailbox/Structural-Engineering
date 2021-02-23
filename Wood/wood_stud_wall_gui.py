@@ -24,17 +24,34 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 '''
 
-import Tkinter as tk
-import tkMessageBox
-import ttk
-import tkFont
-import wood_classes as wood
 import matplotlib
-matplotlib.use('TKAgg')
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2TkAgg
+from sys import version_info
+if version_info.major == 2:
+    # We are using Python 2.x
+    import Tkinter as tk
+    import tkMessageBox
+    import ttk
+    import tkFont
+    import tkFileDialog
+    matplotlib.use('TKAgg')
+    from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2TkAgg
+elif version_info.major == 3:
+    # We are using Python 3.x
+    import tkinter as tk
+    import tkinter.messagebox as tkMessageBox
+    import tkinter.ttk as ttk
+    import tkinter.font as tkFont
+    import tkinter.filedialog as tkFileDialog
+    matplotlib.use('TKAgg')
+    from matplotlib.backends.backend_tkagg import FigureCanvasTk as FigureCanvasTkAgg
+    from matplotlib.backends.backend_tkagg import NavigationToolbar2Tk as NavigationToolbar2TkAgg
+
+
+import wood_classes as wood
+
 from matplotlib.figure import Figure
 import matplotlib.pyplot as plt
-import tkFileDialog
+
 import os
 import math
 
@@ -427,7 +444,15 @@ class Master_window:
         self.ax2.set_ylabel('Mid Height Deflection (in)')
         
         self.canvas = matplotlib.backends.backend_tkagg.FigureCanvasTkAgg(self.Fig, master=self.chart_frame)
-        self.canvas.show()
+       
+        if version_info.major == 2:
+            # We are using Python 2.x
+                self.canvas.show()
+        elif version_info.major == 3:
+            # We are using Python 3.x
+                self.canvas.draw()
+      
+      
         self.canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=1)
 
         self.toolbar = NavigationToolbar2TkAgg(self.canvas, self.chart_frame)
@@ -481,7 +506,14 @@ class Master_window:
         self.ax2B.set_ylabel('Mid Height Deflection (in)')
         
         self.canvasB = matplotlib.backends.backend_tkagg.FigureCanvasTkAgg(self.FigB, master=self.chart_frameB)
-        self.canvasB.show()
+        
+        if version_info.major == 2:
+            # We are using Python 2.x
+                self.canvasB.show()
+        elif version_info.major == 3:
+            # We are using Python 3.x
+                self.canvasB.draw()
+        
         self.canvasB.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=1)
 
         self.toolbarB = NavigationToolbar2TkAgg(self.canvasB, self.chart_frameB)
@@ -538,7 +570,15 @@ class Master_window:
         self.ax2D.set_ylabel('Mid Height Deflection (in)')
         
         self.canvasD = matplotlib.backends.backend_tkagg.FigureCanvasTkAgg(self.FigD, master=self.chart_frameD)
-        self.canvasD.show()
+        
+        if version_info.major == 2:
+            # We are using Python 2.x
+                self.canvasB.show()
+        elif version_info.major == 3:
+            # We are using Python 3.x
+                self.canvasB.draw()
+                
+                
         self.canvasD.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=1)
 
         self.toolbarD = NavigationToolbar2TkAgg(self.canvasD, self.chart_frameD)
@@ -1108,8 +1148,15 @@ class Master_window:
         self.ax1.set_ylabel('Axial (plf)'+e_string)
         
         self.ax1.set_title(self.title)
-        self.canvas.draw()
         
+        if version_info.major == 2:
+        # We are using Python 2.x
+            self.canvas.show()
+        elif version_info.major == 3:
+        # We are using Python 3.x
+            self.canvas.draw()
+                     
+                     
     def generate_pm_graph(self,*event):        
         e_in = self.e_in
         #Refresh chart data for each Cd
@@ -1164,7 +1211,14 @@ class Master_window:
         self.ax1B.set_ylabel('Axial (plf)'+e_string)
         
         self.ax1B.set_title(self.title)
-        self.canvasB.draw()
+        
+        if version_info.major == 2:
+        # We are using Python 2.x
+            self.canvasB.show()
+        elif version_info.major == 3:
+        # We are using Python 3.x
+            self.canvasB.draw()
+        
         
         w,p,d = self.wall.wall_pm_diagram_cd_stud(0.9,e_in)
         self.line_cd009D.set_data(w,p)
@@ -1215,7 +1269,15 @@ class Master_window:
         self.ax1D.set_ylabel('Axial (lbs)'+e_string)
         
         self.ax1D.set_title(self.title_pm_stud)
-        self.canvasD.draw()
+        
+        if version_info.major == 2:
+        # We are using Python 2.x
+            self.canvasD.show()
+        elif version_info.major == 3:
+        # We are using Python 3.x
+            self.canvasD.draw()
+        
+        
         
     def path_exists(self,path):
         res_folder_exist = os.path.isdir(path)
@@ -1944,8 +2006,16 @@ class Master_window:
         self.user_pmD.set_data(m_plot,p_plot)
         self.user_mdD.set_data(m_plot,d_plot)
         
-        self.canvasD.draw()
         
+        if version_info.major == 2:
+        # We are using Python 2.x
+            self.canvasD.show()
+        elif version_info.major == 3:
+        # We are using Python 3.x
+            self.canvasD.draw()
+        
+        
+            
         if ng_count > 0:
             return 1
         else:
